@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,8 +32,12 @@ import {
   MoveHorizontalIcon,
   PrinterIcon,
 } from "lucide-react";
+import { handlePrint } from "@/lib/handlePrint";
 
 export default function Component() {
+  function handlePrintBrowse() {
+    window.print();
+  }
   return (
     <div className="pt-14 flex flex-col w-full min-h-screen bg-muted/40">
       <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -44,6 +49,7 @@ export default function Component() {
             variant="ghost"
             size="icon"
             className="rounded-full hover:bg-muted/50"
+            onClick={handlePrintBrowse}
           >
             <PrinterIcon className="h-5 w-5" />
             <span className="sr-only">Print</span>
@@ -77,7 +83,12 @@ export default function Component() {
               <DropdownMenuCheckboxItem>Graduated</DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size="sm" variant="outline" className="h-8 gap-1">
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-8 gap-1"
+            onClick={() => handlePrint()}
+          >
             <DownloadIcon className="h-4 w-4" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
               Export
