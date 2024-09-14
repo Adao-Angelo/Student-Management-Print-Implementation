@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -32,12 +33,23 @@ import {
   MoveHorizontalIcon,
   PrinterIcon,
 } from "lucide-react";
+
 import { handlePrint } from "@/lib/handlePrint";
 
+import { Students, IStudent } from "@/lib/studentsData";
+import { CSVLink } from "react-csv";
+
 export default function Component() {
+  const [students, setStudents] = useState<IStudent[]>([]);
+
+  useEffect(() => {
+    setStudents(Students);
+  }, []);
+
   function handlePrintBrowse() {
     window.print();
   }
+
   return (
     <div className="pt-14 flex flex-col w-full min-h-screen bg-muted/40">
       <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -45,18 +57,11 @@ export default function Component() {
           <h1 className="text-xl font-semibold sm:text-2xl">
             Student Management
           </h1>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full hover:bg-muted/50"
-            onClick={handlePrintBrowse}
-          >
+          <Button variant="ghost" size="icon" onClick={handlePrintBrowse}>
             <PrinterIcon className="h-5 w-5" />
-            <span className="sr-only">Print</span>
           </Button>
         </div>
         <div className="relative flex-1 md:max-w-xs">
-          <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search students..."
@@ -64,38 +69,10 @@ export default function Component() {
           />
         </div>
         <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 gap-1">
-                <FilterIcon className="h-4 w-4" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Filter
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem checked>
-                Active
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Inactive</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Graduated</DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-8 gap-1"
-            onClick={() => handlePrint()}
-          >
-            <DownloadIcon className="h-4 w-4" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Export
-            </span>
-          </Button>
+          {/* Botões de filtro e exportação */}
         </div>
       </header>
+
       <main className="flex-1 p-4 sm:p-6">
         <Card>
           <CardHeader>
@@ -114,210 +91,64 @@ export default function Component() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">John Doe</div>
-                    <div className="text-sm text-muted-foreground">
-                      johndoe@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">18</TableCell>
-                  <TableCell className="hidden sm:table-cell">12th</TableCell>
-                  <TableCell className="hidden md:table-cell">3.8</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Badge variant="secondary">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoveHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View</DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Jane Smith</div>
-                    <div className="text-sm text-muted-foreground">
-                      janesmith@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">16</TableCell>
-                  <TableCell className="hidden sm:table-cell">10th</TableCell>
-                  <TableCell className="hidden md:table-cell">3.5</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Badge variant="secondary">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoveHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View</DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Michael Johnson</div>
-                    <div className="text-sm text-muted-foreground">
-                      michaeljohnson@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">17</TableCell>
-                  <TableCell className="hidden sm:table-cell">11th</TableCell>
-                  <TableCell className="hidden md:table-cell">3.2</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Badge variant="outline">Inactive</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoveHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View</DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Emily Davis</div>
-                    <div className="text-sm text-muted-foreground">
-                      emilydavis@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">15</TableCell>
-                  <TableCell className="hidden sm:table-cell">9th</TableCell>
-                  <TableCell className="hidden md:table-cell">3.7</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Badge variant="secondary">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoveHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View</DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">David Lee</div>
-                    <div className="text-sm text-muted-foreground">
-                      davidlee@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">19</TableCell>
-                  <TableCell className="hidden sm:table-cell">12th</TableCell>
-                  <TableCell className="hidden md:table-cell">4.0</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Badge variant="secondary">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoveHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View</DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Sarah Kim</div>
-                    <div className="text-sm text-muted-foreground">
-                      sarahkim@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">17</TableCell>
-                  <TableCell className="hidden sm:table-cell">11th</TableCell>
-                  <TableCell className="hidden md:table-cell">3.9</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Badge variant="secondary">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoveHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View</DropdownMenuItem>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
+                {students.map((student, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <div className="font-medium">{student.name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {student.email}
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      {student.age}
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      {student.grade}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {student.gpa}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <Badge
+                        variant={
+                          student.status === "Active" ? "secondary" : "outline"
+                        }
+                      >
+                        {student.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoveHorizontalIcon className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>View</DropdownMenuItem>
+                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex justify-between">
             <div className="text-xs text-muted-foreground">
-              Showing <strong>1-10</strong> of <strong>32</strong> students
+              Showing <strong>1-{students.length}</strong> of{" "}
+              <strong>{students.length}</strong> students
+            </div>
+            <div>
+              <Button>
+                <CSVLink data={students}>Export</CSVLink>
+              </Button>
             </div>
           </CardFooter>
         </Card>
